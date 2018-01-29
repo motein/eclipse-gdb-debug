@@ -2,8 +2,8 @@
 <project default="makeTestApps">
 
     <!-- properties -->
-    <property name="bin_dir" location="D:/Workspace/LaunchGDB/org.eclipse.cdt.tests.dsf.gdb/data/launch/bin"/>
-    <property name="src_dir" location="D:/Workspace/LaunchGDB/org.eclipse.cdt.tests.dsf.gdb/data/launch/src"/>
+    <property name="bin_dir" location="E:/workspace/gdb-debug/org.eclipse.cdt.tests.dsf.gdb/data/launch/bin"/>
+    <property name="src_dir" location="E:/workspace/gdb-debug/org.eclipse.cdt.tests.dsf.gdb/data/launch/src"/>
 
     <!-- targets -->
     <target name="makeTestApps" description="Create the binaries for the test applications">    

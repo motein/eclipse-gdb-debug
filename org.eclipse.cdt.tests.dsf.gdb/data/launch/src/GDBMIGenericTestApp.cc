@@ -1,13 +1,18 @@
 #include <stdio.h>
 
+void algoritm1() {
+	printf("Start algorithm 1\n");
+	for (int i = 0; i < 10; i++) {
+		printf("Generate num: %d\n", i);
+	}
+
+	printf("End algorithm 1\n");
+}
+
 int main() {
     printf("Running Generic App\n");
     
-    const char *path = "/tmp/dsftest.txt";
-    const char *mode = "a";
-    FILE* fd = fopen(path, mode);
-    fprintf(fd, "Running Generic App\n");
-    fclose(fd);
+    algoritm1();
 
     return 0;
 }

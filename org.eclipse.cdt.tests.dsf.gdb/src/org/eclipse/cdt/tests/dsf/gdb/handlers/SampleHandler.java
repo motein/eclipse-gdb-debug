@@ -1,5 +1,6 @@
 package org.eclipse.cdt.tests.dsf.gdb.handlers;
 
+import org.eclipse.cdt.tests.dsf.gdb.framework.DebugHelper;
 import org.eclipse.cdt.tests.dsf.gdb.framework.LaunchGDB;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -22,8 +23,12 @@ public class SampleHandler extends AbstractHandler {
 		try {
 			LaunchGDB.setGlobalPreferences();
 			test.doGDBLaunch();
-			//test.testFunctionBreakpointsAreIndependent0();
-			//test.doAfterTest();
+			DebugHelper.createFunctionBreakpoint("E:/workspace/gdb-debug/org.eclipse.cdt.tests.dsf.gdb/data/launch/src/GDBMIGenericTestApp.cc", "algoritm1");
+			DebugHelper.createLineBreakpoint("E:/workspace/gdb-debug/org.eclipse.cdt.tests.dsf.gdb/data/launch/src/GDBMIGenericTestApp.cc", 9);
+			DebugHelper.printAllBreakpointType();
+			DebugHelper.toggleAllPlatformBreakpoints(false);
+			DebugHelper.showDebugPerspective();
+			//test.terminateGDBLaunch();
 			//LaunchGDB.restoreGlobalPreferences();
 		} catch (Throwable e) {
 			// TODO Auto-generated catch block

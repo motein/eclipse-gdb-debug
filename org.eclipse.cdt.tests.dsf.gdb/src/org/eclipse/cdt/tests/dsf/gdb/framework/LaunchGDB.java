@@ -11,10 +11,8 @@
  *******************************************************************************/
 package org.eclipse.cdt.tests.dsf.gdb.framework;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -41,19 +39,15 @@ import org.eclipse.cdt.dsf.service.DsfSession.SessionStartedListener;
 import org.eclipse.cdt.tests.dsf.gdb.launching.TestsPlugin;
 import org.eclipse.cdt.tests.dsf.gdb.tests.ITestConstants;
 import org.eclipse.cdt.utils.spawner.ProcessFactory;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.debug.core.DebugPlugin;
-import org.eclipse.debug.core.IBreakpointManager;
-import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationType;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
-import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.internal.core.IInternalDebugCoreConstants;
 import org.junit.Assert;
 import org.junit.Assume;
@@ -64,8 +58,8 @@ public class LaunchGDB {
 	//region Constants
 	public final static String DEFAULT_VERSION_STRING = "default"; // Use the default GDB instlled on this machine
 	// Path to .exe or source file
-	protected static final String EXEC_PATH = "D:/Workspace/LaunchGDB/org.eclipse.cdt.tests.dsf.gdb/data/launch/bin/";
-	protected static final String SOURCE_PATH = "D:/Workspace/LaunchGDB/org.eclipse.cdt.tests.dsf.gdb/data/launch/src/";
+	protected static final String EXEC_PATH = "E:/workspace/gdb-debug/org.eclipse.cdt.tests.dsf.gdb/data/launch/bin/";
+	protected static final String SOURCE_PATH = "E:/workspace/gdb-debug/org.eclipse.cdt.tests.dsf.gdb/data/launch/src/";
 	
 	public static final String ATTR_DEBUG_SERVER_NAME = TestsPlugin.PLUGIN_ID + ".DEBUG_SERVER_NAME";
 	private static final String DEFAULT_EXEC_NAME = "GDBMIGenericTestApp.exe";
@@ -115,8 +109,8 @@ public class LaunchGDB {
 	}
 	
 	public void doGDBLaunch() throws Exception {
-		removeTeminatedLaunches();
-		removeAllPlatformBreakpoints();
+		DebugHelper.removeTeminatedLaunches();
+		DebugHelper.removeAllPlatformBreakpoints();
 		setLaunchAttributes();
 		doLaunch();
 	}
@@ -127,7 +121,7 @@ public class LaunchGDB {
 			assertLaunchTerminates();
 			fLaunch = null;
 		}
-		removeAllPlatformBreakpoints();
+		DebugHelper.removeAllPlatformBreakpoints();
 	}
 	//endregion Launch Functions
 	
@@ -209,29 +203,11 @@ public class LaunchGDB {
     public static void removeGlobalLaunchAttribute(String key) {
    		globalLaunchAttributes.remove(key);
     }
-    
-	public void removeAllPlatformBreakpoints() throws CoreException {
-		IBreakpointManager manager = DebugPlugin.getDefault().getBreakpointManager();
-		IBreakpoint[] breakpoints = manager.getBreakpoints();
-		manager.removeBreakpoints(breakpoints, true);
-	}
 	
 	/**
 	 * Make sure we are starting with a clean/known state. That means no
 	 * existing launches.
 	 */
-	public void removeTeminatedLaunches() throws CoreException {
-		ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
-		ILaunch[] launches = launchManager.getLaunches();
-		for (ILaunch launch : launches) {
-			if (!launch.isTerminated()) {
-				fail("Something has gone wrong, there is an unterminated launch from a previous test!");
-			}
-		}
-		if (launches.length > 0) {
-			launchManager.removeLaunches(launches);
-		}
-	}
 	
 	/**
 	 * Make sure we are starting with a clean/known state. That means no
@@ -241,15 +217,7 @@ public class LaunchGDB {
 	 * really need a clean state. This does not remove the race condition, but
 	 * does improve it somewhat.
 	 */
-	public void removeLaunchConfigurationsBeforeTest() throws CoreException {
-		ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
-		ILaunchConfiguration[] launchConfigurations = launchManager.getLaunchConfigurations();
-		for (ILaunchConfiguration launchConfiguration : launchConfigurations) {
-			launchConfiguration.delete();
-		}
 
-		assertEquals("Failed to delete launch configurations", 0, launchManager.getLaunchConfigurations().length);
-	}
     //endregion Remove Functions
     
 	//region Other Supported Functions
